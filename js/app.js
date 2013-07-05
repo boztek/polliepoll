@@ -11,9 +11,9 @@ App.IndexRoute = Ember.Route.extend({
     this.transitionTo('battle');
   }
 });
-App.Router.reopen({
-  location: 'history'
-});
+// App.Router.reopen({
+//   location: 'history'
+// });
 
 App.Store = DS.Store.extend({
   revision: 12,
