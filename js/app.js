@@ -6,11 +6,11 @@ App.Router.map(function() {
   this.route('battle'); // because this isn't related to a thing/noun/data object, it's not a resource
 });
 
-App.IndexRoute = Ember.Route.extend({
-  redirect: function() {
-    this.transitionTo('battle');
-  }
-});
+// App.IndexRoute = Ember.Route.extend({
+//   redirect: function() {
+//     this.transitionTo('battle');
+//   }
+// });
 // App.Router.reopen({
 //   location: 'history'
 // });
