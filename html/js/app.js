@@ -6,13 +6,16 @@ App.Router.map(function() {
   this.route('battle'); // because this isn't related to a thing/noun/data object, it's not a resource
 });
 
-App.IndexRoute = Ember.Route.extend({
-  redirect: function() {
-    this.transitionTo('battle');
+// App.IndexRoute = Ember.Route.extend({
+//   redirect: function() {
+//     this.transitionTo('battle');
+//   }
+// });
+
+App.PolliesRoute = Ember.Route.extend({
+  model: function () {
+    return App.Pollie.find();
   }
-});
-App.Router.reopen({
-  location: 'history'
 });
 
 App.Store = DS.Store.extend({
@@ -26,10 +29,12 @@ App.Pollie = DS.Model.extend({
   picture: DS.attr('string')
 });
 
-App.PolliesRoute = Ember.Route.extend({
-  model: function () {
-    return App.Pollie.find();
-  }
+App.IndexController = Ember.ObjectController.extend({
+  totalPollies: '226'
+  // totalPollies: function() {
+  //   var allPollies = App.Pollie.find();
+  //   return allPollies.content.length;
+  // }()
 });
 
 App.BattleController = Ember.ObjectController.extend({

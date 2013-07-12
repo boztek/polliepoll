@@ -4,13 +4,22 @@
 <meta charset="utf-8">
 <title>Ember Starter Kit</title>
   <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <script type="text/x-handlebars">
-    <h1>Pollie Poll</h1>
+    <h1><a href="/">Pollie Poll</a></h1>
     {{outlet}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="index">
+  <p>{{totalPollies}} enter, only 1 survives!</p>
+
+  {{#linkTo "battle" classNames="button"}}Battle!{{/linkTo}}
+
+
   </script>
 
   <script type="text/x-handlebars" data-template-name="pollies">
@@ -35,7 +44,7 @@
       <p>
         Current score: <span class="score">{{first.score}}</span>.
       </p>
-        <button {{action "addPoint" first}}>Pick {{first.name}}</button>
+        <a class="button" {{action "addPoint" first}}>Pick {{first.name}}</a>
     </div>
     <div class="player player-2" style="width:45%; float:right">
       <h3 class="name">{{second.name}}</h3>
@@ -43,7 +52,7 @@
       <p>
         Current score: <span class="score">{{second.score}}</span>.
       </p>
-        <button {{action "addPoint" second}}>Pick {{second.name}}</button> 
+        <a class="button" {{action "addPoint" second}}>Pick {{second.name}}</a>
     </div>
   </div>
   <footer>
