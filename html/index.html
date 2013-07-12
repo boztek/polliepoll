@@ -5,22 +5,11 @@
 <title>Ember Starter Kit</title>
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
-
-  <style type="text/css">
-    .cage {
-      width: 100%;
-    }
-    .player {
-      float: left;
-      width: 50%;
-    }
-  </style>
 </head>
 <body>
 
   <script type="text/x-handlebars">
     <h1>Pollie Poll</h1>
-
     {{outlet}}
   </script>
 
@@ -31,26 +20,35 @@
     <li>{{name}} <span class="score">{{score}}</span></li>
     {{/each}}
   </ul>
+  <footer>
+    {{#linkTo 'battle'}}Now fight!{{/linkTo}}
+  </footer>
   </script>
 
   <script type="text/x-handlebars" data-template-name="battle">
-  // {{#each controller}}
-  //   {{players.name}}
-  // {{/each}}
   <h2>Battle!</h2>
-  <p>Choose the Clown who sucks the least</p>
-  <div class="cage" style="width:100%">
-    <div class="player playerID1">
-      <h3 class="name"></h3>
-      <img src="images/kevin.png"/>
-      <p><a href="#">Pick name1</a></p>
+  <p>Choose the clown who sucks the least</p>
+  <div class="cage" style="width:75%;float:left">
+    <div class="player player-1" style="width:45%; float:left">
+      <h3 class="name">{{first.name}}</h3>
+      {{image first.picture}}
+      <p>
+        Current score: <span class="score">{{first.score}}</span>.
+      </p>
+        <button {{action "addPoint" first}}>Pick {{first.name}}</button>
     </div>
-    <div class="player1 playerID2">
-      <h3 class="name"></h3>
-      <img src="images/joe.png"/>
-      <p><a href="#">Pick name2</a></p>
+    <div class="player player-2" style="width:45%; float:right">
+      <h3 class="name">{{second.name}}</h3>
+      {{image second.picture}}
+      <p>
+        Current score: <span class="score">{{second.score}}</span>.
+      </p>
+        <button {{action "addPoint" second}}>Pick {{second.name}}</button> 
     </div>
   </div>
+  <footer>
+    {{#linkTo 'pollies'}}See list of pretty pollies{{/linkTo}}
+  </footer>
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
