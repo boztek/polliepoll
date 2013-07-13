@@ -1,16 +1,9 @@
 App = Ember.Application.create();
 
 App.Router.map(function() {
-  // put your routes here
-  this.resource('pollies'); // resource vs route, this refers to the Router object
-  this.route('battle'); // because this isn't related to a thing/noun/data object, it's not a resource
+  this.resource('pollies');
+  this.route('battle');
 });
-
-// App.IndexRoute = Ember.Route.extend({
-//   redirect: function() {
-//     this.transitionTo('battle');
-//   }
-// });
 
 App.PolliesRoute = Ember.Route.extend({
   model: function () {
@@ -18,57 +11,66 @@ App.PolliesRoute = Ember.Route.extend({
   }
 });
 
+App.BattleRoute = Ember.Route.extend({
+  model: function () {
+    return App.Pollie.find();
+  },
+  setupController: function (controller, model) {
+      this._super(controller, model);
+      this.controllerFor('battle').resetClowns();
+  }
+});
+
+App.BattleController = Ember.ArrayController.extend({
+    twoRandomClownIDs: function () {
+        var n_pollies = 4;
+        var firstId = Math.ceil(Math.random() * n_pollies);
+        var secondId = Math.ceil(Math.random() * n_pollies);
+        while (secondId === firstId) {
+            secondId = Math.ceil(Math.random() * n_pollies);
+        }
+        return [firstId, secondId];
+    },
+    resetClowns: function () {
+        var clownIds = this.twoRandomClownIDs();
+        var firstClown = App.Pollie.find(clownIds[0]);
+        var secondClown = App.Pollie.find(clownIds[1]);
+        this.set('firstClown', firstClown);
+        this.set('secondClown', secondClown);
+    },
+    topScoreClown: function () {
+        var maxIndex = 0;
+        this.getEach('score').reduce(function (max, score, index) {
+            if (score > max) {
+                maxIndex = index;
+                return score;
+            }
+            else {
+                return max;
+            }
+        }, 0);
+        var topPollie = App.Pollie.find(maxIndex);
+        return topPollie;
+    }.property('@each.score')
+});
+
+App.ClownController = Ember.ObjectController.extend({
+    needs: ['battle'],
+    pickClown: function (clown) {
+        clown.incrementProperty('score');
+        this.get('controllers.battle').resetClowns();
+    }
+});
+
 App.Store = DS.Store.extend({
-  revision: 12,
-  adapter: 'DS.FixtureAdapter'
+    revision: 12,
+    adapter: 'DS.FixtureAdapter'
 });
 
 App.Pollie = DS.Model.extend({
-  name: DS.attr('string'),
-  score: DS.attr('number'),
-  picture: DS.attr('string')
-});
-
-App.IndexController = Ember.ObjectController.extend({
-  totalPollies: '226'
-  // totalPollies: function() {
-  //   var allPollies = App.Pollie.find();
-  //   return allPollies.content.length;
-  // }()
-});
-
-App.BattleController = Ember.ObjectController.extend({
-  init: function () {
-    this._super();
-    var firstId = Math.ceil(Math.random() * 4);
-    var secondId = Math.ceil(Math.random() * 4);
-    while (secondId === firstId) {
-      secondId = Math.ceil(Math.random() * 4);
-    }
-    this.first  = App.Pollie.find(firstId);
-    this.second = App.Pollie.find(secondId);
-  },
-  addPoint: function (pollie) {
-    var currentScore = pollie.get('score');
-    pollie.set('score', currentScore + 1);
-    // refresh choices
-    var firstId = Math.ceil(Math.random() * 4);
-    var secondId = Math.ceil(Math.random() * 4);
-    while (secondId === firstId) {
-      secondId = Math.ceil(Math.random() * 4);
-    }
-    this.set('first', App.Pollie.find(firstId));
-    this.set('second', App.Pollie.find(secondId));
-  },
-});
-
-Ember.Handlebars.helper('image', function (value) {
-  if (value !== undefined) {
-    return new Handlebars.SafeString('<img src="images/' +value+ '" />');
-  }
-  else {
-    return '';
-  }
+    name: DS.attr('string'),
+    score: DS.attr('number'),
+    picture: DS.attr('string')
 });
 
 App.Pollie.FIXTURES = [

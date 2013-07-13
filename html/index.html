@@ -17,16 +17,8 @@
 <body>
 
   <script type="text/x-handlebars">
-    <h1><a href="/">Pollie Poll</a></h1>
-    {{outlet}}
-  </script>
-
-  <script type="text/x-handlebars" data-template-name="index">
-  <p>{{totalPollies}} enter, only 1 survives!</p>
-
-  {{#linkTo "battle" classNames="button"}}Battle!{{/linkTo}}
-
-
+    <h1>Pollie Poll</h1>
+    {{ outlet }}
   </script>
 
   <script type="text/x-handlebars" data-template-name="pollies">
@@ -34,37 +26,32 @@
   <ul>
     {{#each controller}}
     <li>{{name}} <span class="score">{{score}}</span></li>
+    {{ render 'clown' this }}
     {{/each}}
   </ul>
-  <footer>
-    {{#linkTo 'battle'}}Now fight!{{/linkTo}}
-  </footer>
   </script>
 
   <script type="text/x-handlebars" data-template-name="battle">
-  <h2>Battle!</h2>
-  <p>Choose the clown who sucks the least</p>
-  <div class="cage" style="width:75%;float:left">
-    <div class="player player-1" style="width:45%; float:left">
-      <h3 class="name">{{first.name}}</h3>
-      {{image first.picture}}
-      <p>
-        Current score: <span class="score">{{first.score}}</span>.
-      </p>
-        <a class="button" {{action "addPoint" first}}>Pick {{first.name}}</a>
+    {{ render 'clown' this.firstClown }}
+    {{ render 'clown' this.secondClown }}
+    <div>
+        Winner: {{ topScoreClown.name }}
     </div>
-    <div class="player player-2" style="width:45%; float:right">
-      <h3 class="name">{{second.name}}</h3>
-      {{image second.picture}}
-      <p>
-        Current score: <span class="score">{{second.score}}</span>.
-      </p>
-        <a class="button" {{action "addPoint" second}}>Pick {{second.name}}</a>
+    <div>
+        Score: {{ topScoreClown.score }}
     </div>
-  </div>
-  <footer>
-    {{#linkTo 'pollies'}}See list of pretty pollies{{/linkTo}}
-  </footer>
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="clown">
+    <a href="#" {{ action "pickClown" this }}>
+        <div>
+            {{ name }}
+        </div>
+        <div>
+            {{ score }}
+        </div>
+    </a>
+
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
