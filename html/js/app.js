@@ -49,7 +49,7 @@ App.BattleController = Ember.ArrayController.extend({
                 return max;
             }
         }, 0);
-        return App.Pollie.find().objectAt(maxIndex);
+        return this.objectAt(maxIndex);
     }.property('@each.score')
 });
 
